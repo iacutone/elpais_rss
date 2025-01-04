@@ -1,6 +1,6 @@
 # ElpaisRss
 
-**TODO: Add description**
+Backend for [Master Spanish Today](https://masterspanish.today)
 
 ## Installation
 
@@ -14,7 +14,3 @@ def deps do
   ]
 end
 ```
-
-Backend for [Master Spanish Today](https://masterspanish.today)
-
-

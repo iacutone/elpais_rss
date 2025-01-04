@@ -22,7 +22,7 @@ defmodule ElpaisRss.Article do
     zipped = Enum.zip(String.split(article_text, "\n"), String.split(translated_text, "\n"))
 
     Enum.reduce(zipped, "", fn {original, translated}, acc ->
-      acc <> original <> "\n" <> translated
+      acc <> original <> "\n" <> translated <> "\n"
     end) <> unsubscribe_link()
   end
 
