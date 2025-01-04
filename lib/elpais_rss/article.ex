@@ -22,15 +22,15 @@ defmodule ElpaisRss.Article do
     zipped = Enum.zip(String.split(article_text, "\n"), String.split(translated_text, "\n"))
 
     Enum.reduce(zipped, "", fn {original, translated}, acc ->
-      acc <> original <> "\n" <> translated <> "\n"
+      acc <> original <> "\n" <> translated <> "\n\n"
     end) <> unsubscribe_link()
   end
 
   defp unsubscribe_link do
     ~S"""
-    Unsubscribe:
 
-    https://amazonaws.us13.list-manage.com/unsubscribe?u=93b41a1871734324d088abc68&id=208637560c'
+
+    Unsubscribe: https://amazonaws.us13.list-manage.com/unsubscribe?u=93b41a1871734324d088abc68&id=208637560c'
     """
   end
 end
