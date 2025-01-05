@@ -30,7 +30,7 @@ defmodule ElpaisRss.Article do
     ~S"""
 
 
-    Unsubscribe: https://amazonaws.us13.list-manage.com/unsubscribe?u=93b41a1871734324d088abc68&id=208637560c'
+    Unsubscribe: https://amazonaws.us13.list-manage.com/unsubscribe?u=93b41a1871734324d088abc68&id=208637560c
     """
   end
 end
