@@ -11,10 +11,7 @@ defmodule ElpaisRss do
     article = Article.fetch()
     emails = Email.fetch()
 
-    IO.puts("<<<<< TRYING TO SEND EMAILS")
-
     if Email.send(article, emails) == :ok do
-      IO.puts("<<<<< EMAILS SENT!")
       HTTPoison.get("https://cronhub.io/ping/9b7e1860-7ffb-11ea-83b7-11422ae8ff81")
     end
   end
