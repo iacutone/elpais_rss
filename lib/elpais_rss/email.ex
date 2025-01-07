@@ -29,7 +29,7 @@ defmodule ElpaisRss.Email do
         %{to: [email], bcc: [], cc: []},
         %{
           body: %{text: %{data: text, charset: "UTF-8"}},
-          subject: %{data: String.slice(title, 0..45) <> "...", charset: "UTF-8"}
+          subject: %{data: title, charset: "UTF-8"}
         },
         "hello@masterspanish.today"
       )
