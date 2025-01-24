@@ -26,7 +26,7 @@ defmodule ElpaisRss.MixProject do
       {:ex_aws_ses, "~> 2.0"},
       {:feeder_ex, git: "https://github.com/KristerV/feeder_ex.git"},
       {:google_api_translate, "~> 0.21.0"},
-      {:goth, "~> 1.3.0"},
+      {:goth, "~> 1.4.0"},
       {:jason, "~> 1.4"},
       {:quantum, "~> 3.0"},
       {:readability, "~> 0.12"}
