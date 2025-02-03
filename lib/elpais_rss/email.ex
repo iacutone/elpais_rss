@@ -8,16 +8,16 @@ defmodule ElpaisRss.Email do
 
   @doc "Fetch subscriber emails from MailChimp"
   def fetch do
-    {:ok, %{body: body}} = HTTPoison.get(@endpoint, headers())
-    {:ok, %{"members" => members}} = Jason.decode(body)
+    with {:ok, %{body: body}} <- HTTPoison.get(@endpoint, headers()),
+         {:ok, %{"members" => members}} <- Jason.decode(body) do
+      Enum.reduce(members, [], fn
+        %{"status" => "subscribed", "email_address" => email}, acc ->
+          [email | acc]
 
-    Enum.reduce(members, [], fn
-      %{"status" => "subscribed", "email_address" => email}, acc ->
-        [email | acc]
-
-      _, acc ->
-        acc
-    end)
+        _, acc ->
+          acc
+      end)
+    end
   end
 
   @doc "Send emails with AWS SES"
