@@ -38,8 +38,6 @@ defmodule ElpaisRss.Email do
         secret_access_key: System.fetch_env!("AWS_SECRET_KEY")
       )
     end)
-
-    :ok
   end
 
   defp headers do

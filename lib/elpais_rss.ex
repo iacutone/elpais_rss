@@ -8,10 +8,9 @@ defmodule ElpaisRss do
 
   @doc "Email the first most viewed RSS article entry to MailChimp client list via AWS SES"
   def run do
-    article = Article.fetch()
-    emails = Email.fetch()
-
-    if Email.send(article, emails) == :ok do
+    with article when is_map(article) <- Article.fetch(),
+         emails when is_list(emails) <- Email.fetch(),
+         :ok <- Email.send(article, emails) do
       HTTPoison.get("https://cronhub.io/ping/9b7e1860-7ffb-11ea-83b7-11422ae8ff81")
     end
   end
