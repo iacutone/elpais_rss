@@ -9,9 +9,8 @@ defmodule ElpaisRss.Article do
   def fetch do
     with {:ok, %{body: body}} <- HTTPoison.get(@url),
          {:ok, %{entries: [%{id: id} | _]}, _} <- FeederEx.parse(body),
-         %{title: title, article_text: article_text} <- Readability.summarize(id),
-         translated_text when is_binary(translated_text) <-
-           ElpaisRss.Translate.translate(article_text) do
+         %{title: title, article_text: article_text} <- Readability.summarize(id) do
+      translated_text = ElpaisRss.Translate.translate(article_text)
       %{title: title, text: compose_article_text(article_text, translated_text)}
     end
   end

@@ -3,21 +3,41 @@ defmodule ElpaisRss.Translate do
   Translate Spanish text into English
   """
 
-  @doc "Translate a given corpus of text"
-  def translate(text) do
-    token = Goth.fetch!(ElpaisRss.Goth).token
-    conn = GoogleApi.Translate.V2.Connection.new(token)
+  @gemeni_api_key System.fetch_env!("GOOGLE_GEMINI_API_KEY")
 
-    req = %GoogleApi.Translate.V2.Model.TranslateTextRequest{
-      format: "text",
-      model: "nmt",
-      q: text,
-      source: "es",
-      target: "en"
+  @doc "Translate a given corpus of text with Google Gemini LLM"
+  def translate(text) do
+    body = %{
+      "system_instruction" => %{
+        "parts" => [
+          %{
+            "text" =>
+              "Can you translate the following text exactly without any additional comments?"
+          }
+        ]
+      },
+      "contents" => [
+        %{
+          "parts" => [
+            %{
+              "text" => text
+            }
+          ]
+        }
+      ]
     }
 
-    case GoogleApi.Translate.V2.Api.Translations.language_translations_translate(conn, body: req) do
-      {:ok, %{translations: [%{translatedText: text} | _]}} ->
+    req =
+      Req.new(
+        body: Jason.encode!(body),
+        headers: [{"x-goog-api-key", @gemeni_api_key}],
+        method: :post,
+        url:
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+      )
+
+    case Req.Request.run_request(req) do
+      {_req, %{body: %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]}}} ->
         text
 
       _ ->

@@ -14,7 +14,7 @@ defmodule ElpaisRss.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :inets],
       mod: {ElpaisRss.Application, []}
     ]
   end
@@ -25,9 +25,8 @@ defmodule ElpaisRss.MixProject do
       {:ex_aws, "~> 2.0"},
       {:ex_aws_ses, "~> 2.0"},
       {:feeder_ex, git: "https://github.com/KristerV/feeder_ex.git"},
-      {:google_api_translate, "~> 0.21.0"},
-      {:goth, "~> 1.4.0"},
       {:jason, "~> 1.4"},
+      {:req, "~> 0.5.14"},
       {:quantum, "~> 3.0"},
       {:readability, "~> 0.12"}
     ]
