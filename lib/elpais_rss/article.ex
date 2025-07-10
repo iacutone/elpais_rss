@@ -3,11 +3,11 @@ defmodule ElpaisRss.Article do
   Retrieve the latest article
   """
 
-  @url System.fetch_env!("EL_PAIS_RSS_URL")
+  @url Application.compile_env!(:elpais_rss, :el_pais_rss_url)
 
   @doc "Fetch the first RSS entry's id and summarize the article text"
   def fetch do
-    with {:ok, %{body: body}} <- HTTPoison.get(@url),
+    with {:ok, %{body: body}} <- Req.get(@url),
          {:ok, %{entries: [%{id: id} | _]}, _} <- FeederEx.parse(body),
          %{title: title, article_text: article_text} <- Readability.summarize(id) do
       translated_text = ElpaisRss.Translate.translate(article_text)

@@ -3,7 +3,7 @@ defmodule ElpaisRss.Email do
   Retrieve emails from provider and email clients
   """
 
-  @auth System.fetch_env!("MAILCHIMP_API_KEY")
+  @auth Application.compile_env!(:elpais_rss, :mailchimp_api_key)
   @endpoint "https://us13.api.mailchimp.com/3.0/lists/208637560c/members"
 
   @doc "Fetch subscriber emails from MailChimp"

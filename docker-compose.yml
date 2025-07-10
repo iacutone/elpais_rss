@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  elpais_rss:
+    build:
+      context: .
+      # Only pass build-time variables here if needed during compilation
+    environment:
+      # Runtime environment variables
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - EL_PAIS_RSS_URL=${EL_PAIS_RSS_URL}
+      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY}
+      - MIX_ENV=prod

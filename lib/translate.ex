@@ -3,7 +3,7 @@ defmodule ElpaisRss.Translate do
   Translate Spanish text into English
   """
 
-  @gemeni_api_key System.fetch_env!("GOOGLE_GEMINI_API_KEY")
+  @gemeni_api_key Application.compile_env!(:elpais_rss, :google_gemini_api_key)
 
   @doc "Translate a given corpus of text with Google Gemini LLM"
   def translate(text) do
@@ -12,7 +12,7 @@ defmodule ElpaisRss.Translate do
         "parts" => [
           %{
             "text" =>
-              "Can you translate the following text exactly without any additional comments?"
+              "Can you translate the following text exactly without any additional comments?, Additionally, please keep all \n characters."
           }
         ]
       },
@@ -32,6 +32,7 @@ defmodule ElpaisRss.Translate do
         body: Jason.encode!(body),
         headers: [{"x-goog-api-key", @gemeni_api_key}],
         method: :post,
+        receive_timeout: :timer.seconds(1_000),
         url:
           "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
       )
@@ -40,7 +41,8 @@ defmodule ElpaisRss.Translate do
       {_req, %{body: %{"candidates" => [%{"content" => %{"parts" => [%{"text" => text}]}}]}}} ->
         text
 
-      _ ->
+      error ->
+        IO.inspect(error)
         nil
     end
   end
