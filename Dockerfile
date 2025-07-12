@@ -32,6 +32,8 @@ RUN apt-get update -y && apt-get install -y libssl3 openssl && rm -rf /var/lib/a
 # Set the working directory
 WORKDIR /app
 
+ENV LANG=C.UTF-8
+
 # Copy the compiled release from the builder stage
 # The 'your_app' directory will be created by `mix release`
 COPY --from=builder /app/_build/prod/rel/elpais_rss ./elpais_rss

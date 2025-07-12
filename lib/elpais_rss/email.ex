@@ -3,7 +3,6 @@ defmodule ElpaisRss.Email do
   Retrieve emails from provider and email clients
   """
 
-  @auth Application.compile_env!(:elpais_rss, :mailchimp_api_key)
   @endpoint "https://us13.api.mailchimp.com/3.0/lists/208637560c/members"
 
   @doc "Fetch subscriber emails from MailChimp"
@@ -34,15 +33,19 @@ defmodule ElpaisRss.Email do
         "hello@masterspanish.today"
       )
       |> ExAws.request(
-        access_key_id: System.fetch_env!("AWS_ACCESS_KEY"),
-        secret_access_key: System.fetch_env!("AWS_SECRET_KEY")
+        access_key_id: Application.fetch_env!(:elpais_rss, :aws_access_key),
+        secret_access_key: Application.fetch_env!(:elpais_rss, :aws_secret_key)
       )
     end)
   end
 
   defp headers do
-    credentials_encoded = Base.encode64("anystring:#{@auth}")
+    credentials_encoded = Base.encode64("anystring:#{auth()}")
 
     [{"Authorization", "Basic #{credentials_encoded}"}]
+  end
+
+  defp auth do
+    Application.fetch_env!(:elpais_rss, :mailchimp_api_key)
   end
 end
