@@ -22,6 +22,7 @@ defmodule ElpaisRss.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:castore, "~> 1.0"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_ses, "~> 2.0"},
       {:feeder_ex, git: "https://github.com/KristerV/feeder_ex.git"},
