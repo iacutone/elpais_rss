@@ -1,11 +1,9 @@
 version: '3.8'
 services:
-  elpais_rss:
-    build:
-      context: .
-      # Only pass build-time variables here if needed during compilation
+  runner:
+    build: .
+    image: elpais_rss:latest
     environment:
-      # Runtime environment variables
       - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
       - AWS_SECRET_KEY=${AWS_SECRET_KEY}
       - EL_PAIS_RSS_URL=${EL_PAIS_RSS_URL}
