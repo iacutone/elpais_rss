@@ -15,12 +15,8 @@ defmodule ElpaisRss.Article do
 
   defp compose_article_text(article_text, nil), do: article_text <> unsubscribe_link()
 
-  defp compose_article_text(article_text, translated_text) do
-    zipped = Enum.zip(String.split(article_text, "\n"), String.split(translated_text, "\n"))
-
-    Enum.reduce(zipped, "", fn {original, translated}, acc ->
-      acc <> original <> "\n" <> translated <> "\n\n"
-    end) <> unsubscribe_link()
+  defp compose_article_text(_article_text, translated_text) do
+    translated_text <> unsubscribe_link()
   end
 
   defp unsubscribe_link do

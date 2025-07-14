@@ -12,7 +12,7 @@ defmodule ElpaisRss.Translate do
         "parts" => [
           %{
             "text" =>
-              "Can you translate the following text exactly without any additional comments?, Additionally, please keep all \n characters."
+              "Can you translate the following text exactly without any additional comments?, Additionally, can you intersperse the Spanish translation and the translated English text?"
           }
         ]
       },
@@ -32,7 +32,7 @@ defmodule ElpaisRss.Translate do
         body: Jason.encode!(body),
         headers: [{"x-goog-api-key", gemeni_api_key()}],
         method: :post,
-        receive_timeout: :timer.seconds(1_000),
+        receive_timeout: :timer.seconds(1_500),
         url: @model_url
       )
 
