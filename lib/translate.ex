@@ -32,7 +32,7 @@ defmodule ElpaisRss.Translate do
         body: Jason.encode!(body),
         headers: [{"x-goog-api-key", gemeni_api_key()}],
         method: :post,
-        receive_timeout: :timer.seconds(1_500),
+        receive_timeout: :timer.seconds(3_500),
         url: @model_url
       )
 

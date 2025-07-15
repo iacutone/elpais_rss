@@ -1,6 +1,5 @@
 FROM hexpm/elixir:1.17.3-erlang-26.0.2-debian-bookworm-20250630-slim AS builder
-# Set the working directory inside the container
-WORKDIR /app
+
 # Install build dependencies (often needed for NIFs or other C libraries)
 # Customize this list based on your application's needs
 RUN apt-get update -y && apt-get install -y build-essential git libssl3 openssl
