@@ -1,0 +1,16 @@
+service: elpais_rss
+image: elpais_rss
+
+servers:
+  - HETZNER_HOST
+
+builder:
+  local: true
+
+env:
+  secret:
+    - AWS_ACCESS_KEY
+    - AWS_SECRET_KEY
+    - EL_PAIS_RSS_URL
+    - MAILCHIMP_API_KEY
+    - GOOGLE_GEMINI_API_KEY 
