@@ -23,11 +23,14 @@ jobs:
       run: |
         # Install Kamal manually with proper version detection
         mkdir -p $HOME/.local/bin
-        # Get the latest version
+        # Get the latest version and find the correct asset
         KAMAL_VERSION=$(curl -s https://api.github.com/repos/basecamp/kamal/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         echo "Installing Kamal version: $KAMAL_VERSION"
+        # Find the correct asset URL for linux x86_64
+        ASSET_URL=$(curl -s "https://api.github.com/repos/basecamp/kamal/releases/latest" | grep -o '"browser_download_url": "[^"]*kamal-linux-x86_64[^"]*"' | head -1 | sed 's/"browser_download_url": "//' | sed 's/"//')
+        echo "Downloading from: $ASSET_URL"
         # Download the correct binary
-        curl -L "https://github.com/basecamp/kamal/releases/download/${KAMAL_VERSION}/kamal-linux-x86_64" -o $HOME/.local/bin/kamal
+        curl -L "$ASSET_URL" -o $HOME/.local/bin/kamal
         chmod +x $HOME/.local/bin/kamal
         echo "$HOME/.local/bin" >> $GITHUB_PATH
         # Verify installation
