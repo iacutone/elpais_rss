@@ -21,8 +21,13 @@ jobs:
 
     - name: Install Kamal
       run: |
-        curl -fsSL https://kamal-deploy.org/install.sh | sh
+        # Install Kamal manually
+        mkdir -p $HOME/.local/bin
+        curl -L https://github.com/basecamp/kamal/releases/latest/download/kamal-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m) -o $HOME/.local/bin/kamal
+        chmod +x $HOME/.local/bin/kamal
         echo "$HOME/.local/bin" >> $GITHUB_PATH
+        # Verify installation
+        $HOME/.local/bin/kamal version
 
     - name: Setup SSH
       run: |
@@ -48,5 +53,5 @@ jobs:
       run: |
         # Update the deploy config with the actual host
         sed -i "s/your-hetzner-server-ip/$HETZNER_HOST/g" config/deploy.exs
-        # Use the full path to kamal
+        # Deploy using the verified kamal installation
         $HOME/.local/bin/kamal deploy 
