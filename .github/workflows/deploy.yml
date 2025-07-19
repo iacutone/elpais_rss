@@ -48,4 +48,5 @@ jobs:
       run: |
         # Update the deploy config with the actual host
         sed -i "s/your-hetzner-server-ip/$HETZNER_HOST/g" config/deploy.exs
-        kamal deploy 
+        # Use the full path to kamal
+        $HOME/.local/bin/kamal deploy 
