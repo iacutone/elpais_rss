@@ -10,7 +10,7 @@ registry:
     - DOCKER_REGISTRY_PASSWORD
 
 builder:
-  local: true
+  arch: amd64
 
 env:
   secret:
