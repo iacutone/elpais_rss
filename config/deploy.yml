@@ -3,7 +3,8 @@ image: iacutone/elpais_rss
 
 servers:
   web:
-    - HETZNER_HOST
+    hosts:
+      - HETZNER_HOST
 
 registry:
   username: iacutone
