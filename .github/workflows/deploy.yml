@@ -58,7 +58,7 @@ jobs:
         EL_PAIS_RSS_URL=\$EL_PAIS_RSS_URL
         MAILCHIMP_API_KEY=\$MAILCHIMP_API_KEY
         GOOGLE_GEMINI_API_KEY=\$GOOGLE_GEMINI_API_KEY
-        HETZNER_REGISTRY_PASSWORD=\$HETZNER_REGISTRY_PASSWORD
+        DOCKER_REGISTRY_PASSWORD=\$DOCKER_REGISTRY_PASSWORD
         EOF
 
     - name: Deploy with Kamal
@@ -69,7 +69,7 @@ jobs:
         MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
         GOOGLE_GEMINI_API_KEY: ${{ secrets.GOOGLE_GEMINI_API_KEY }}
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
-        HETZNER_REGISTRY_PASSWORD: ${{ secrets.HETZNER_REGISTRY_PASSWORD }}
+        DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
         # Deploy using Kamal gem
         kamal deploy 
