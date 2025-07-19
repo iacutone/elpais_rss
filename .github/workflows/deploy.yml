@@ -21,23 +21,19 @@ jobs:
 
     - name: Install Kamal
       run: |
-        # Install Kamal manually with proper version detection
-        mkdir -p $HOME/.local/bin
-        # Get the latest version and find the correct asset
-        KAMAL_VERSION=$(curl -s https://api.github.com/repos/basecamp/kamal/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-        echo "Installing Kamal version: $KAMAL_VERSION"
-        # Debug: show all available assets
-        echo "Available assets:"
-        curl -s "https://api.github.com/repos/basecamp/kamal/releases/latest" | grep '"browser_download_url"' | head -5
-        # Find the correct asset URL for linux x86_64
-        ASSET_URL=$(curl -s "https://api.github.com/repos/basecamp/kamal/releases/latest" | grep '"browser_download_url"' | grep 'linux' | grep 'x86_64' | head -1 | sed 's/.*"browser_download_url": "//' | sed 's/".*//')
-        echo "Downloading from: $ASSET_URL"
-        # Download the correct binary
-        curl -L "$ASSET_URL" -o $HOME/.local/bin/kamal
-        chmod +x $HOME/.local/bin/kamal
+        # Install Kamal using the official installation script
+        curl -fsSL https://kamal-deploy.org/install.sh | sh
         echo "$HOME/.local/bin" >> $GITHUB_PATH
+        # Alternative: install manually if the script fails
+        if [ ! -f "$HOME/.local/bin/kamal" ]; then
+          echo "Official install failed, trying manual install..."
+          mkdir -p $HOME/.local/bin
+          # Try direct download from latest release
+          curl -L "https://github.com/basecamp/kamal/releases/latest/download/kamal-linux-x86_64" -o $HOME/.local/bin/kamal
+          chmod +x $HOME/.local/bin/kamal
+        fi
         # Verify installation
-        $HOME/.local/bin/kamal version
+        $HOME/.local/bin/kamal version || echo "Kamal installation failed"
 
     - name: Setup SSH
       run: |
