@@ -42,22 +42,6 @@ jobs:
         mix local.rebar --force
         mix deps.get
 
-    - name: Setup Kamal Configuration
-      env:
-        HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
-      run: |
-        # Update the deploy config with the actual host
-        sed -i "s/your-hetzner-server-ip/$HETZNER_HOST/g" config/deploy.yml
-        # Create .kamal/secrets file
-        mkdir -p .kamal
-        cat > .kamal/secrets << EOF
-        AWS_ACCESS_KEY=\$AWS_ACCESS_KEY
-        AWS_SECRET_KEY=\$AWS_SECRET_KEY
-        EL_PAIS_RSS_URL=\$EL_PAIS_RSS_URL
-        MAILCHIMP_API_KEY=\$MAILCHIMP_API_KEY
-        GOOGLE_GEMINI_API_KEY=\$GOOGLE_GEMINI_API_KEY
-        EOF
-
     - name: Deploy with Kamal
       env:
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
@@ -66,6 +50,7 @@ jobs:
         MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
         GOOGLE_GEMINI_API_KEY: ${{ secrets.GOOGLE_GEMINI_API_KEY }}
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+        HETZNER_REGISTRY_PASSWORD: ${{ secrets.HETZNER_REGISTRY_PASSWORD }}
       run: |
         # Deploy using Kamal gem
         kamal deploy 

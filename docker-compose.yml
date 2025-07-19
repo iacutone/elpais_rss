@@ -2,7 +2,7 @@ version: '3.8'
 services:
   runner:
     build: .
-    image: elpais_rss:latest
+    image: iacutone/elpais_rss:latest
     environment:
       - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
       - AWS_SECRET_KEY=${AWS_SECRET_KEY}

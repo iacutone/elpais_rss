@@ -1,0 +1,14 @@
+_build/
+deps/
+.git/
+.gitignore
+README.md
+DEPLOYMENT.md
+deploy.sh
+setup-github-secrets.sh
+.github/
+erl_crash.dump
+.tool-versions
+docker-compose.yml
+config/deploy.yml
+.kamal/ 

@@ -1,8 +1,13 @@
 service: elpais_rss
-image: elpais_rss
+image: iacutone/elpais_rss
 
 servers:
   - HETZNER_HOST
+
+registry:
+  username: iacutone
+  password:
+    - DOCKER_REGISTRY_PASSWORD
 
 builder:
   local: true

@@ -1,23 +1,31 @@
 FROM hexpm/elixir:1.17.3-erlang-26.0.2-debian-bookworm-20250630-slim AS builder
 
-# Install build dependencies (often needed for NIFs or other C libraries)
-# Customize this list based on your application's needs
+# Install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git libssl3 openssl
-# Copy the mix.exs and mix.lock first to leverage Docker cache
-# This means if your dependencies don't change, this layer won't rebuild
+
+# Set up Elixir
 RUN mix local.hex --force && mix local.rebar --force
-COPY mix.exs ./
-COPY mix.lock ./
-# Fetch Mix dependencies
+
+# Set working directory
+WORKDIR /app
+
+# Copy mix files first for better caching
+COPY mix.exs mix.lock ./
+
+# Install dependencies
 RUN mix deps.get --only prod
-# Copy the rest of your application code
-COPY . .
-# Compile your Elixir application
-RUN mix deps.compile
-# Create the Elixir release
-# Replace 'your_app' with the actual name of your application from mix.exs
-# Ensure your release configuration is correct in rel/config.exs or mix.exs
+
+# Copy application code
+COPY config/ ./config/
+COPY lib/ ./lib/
+# COPY test/ ./test/
+
+# Compile dependencies and application
 ENV MIX_ENV=prod
+RUN mix deps.compile
+RUN mix compile
+
+# Create release
 RUN mix release --overwrite
 
 # Stage 2: Create the final production image
