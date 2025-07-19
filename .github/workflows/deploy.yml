@@ -13,6 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4.5'
+
     - name: Setup Elixir
       uses: erlef/setup-beam@v1
       with:
@@ -21,17 +26,8 @@ jobs:
 
     - name: Install Kamal
       run: |
-        # Install Kamal manually with a known working version
-        mkdir -p $HOME/.local/bin
-        # Use a specific known working version
-        curl -L "https://github.com/basecamp/kamal/releases/download/v2.7.0/kamal-linux-x86_64" -o $HOME/.local/bin/kamal
-        chmod +x $HOME/.local/bin/kamal
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
-        # Debug: check what we downloaded
-        echo "File size: $(wc -c < $HOME/.local/bin/kamal) bytes"
-        echo "File type: $(file $HOME/.local/bin/kamal)"
-        # Verify installation
-        $HOME/.local/bin/kamal version || echo "Kamal installation failed"
+        gem install kamal
+        kamal version
 
     - name: Setup SSH
       run: |
@@ -57,5 +53,5 @@ jobs:
       run: |
         # Update the deploy config with the actual host
         sed -i "s/your-hetzner-server-ip/$HETZNER_HOST/g" config/deploy.exs
-        # Deploy using the verified kamal installation
-        $HOME/.local/bin/kamal deploy 
+        # Deploy using Kamal gem
+        kamal deploy 
