@@ -21,17 +21,15 @@ jobs:
 
     - name: Install Kamal
       run: |
-        # Install Kamal using the official installation script
-        curl -fsSL https://kamal-deploy.org/install.sh | sh
+        # Install Kamal manually with a known working version
+        mkdir -p $HOME/.local/bin
+        # Use a specific known working version
+        curl -L "https://github.com/basecamp/kamal/releases/download/v2.7.0/kamal-linux-x86_64" -o $HOME/.local/bin/kamal
+        chmod +x $HOME/.local/bin/kamal
         echo "$HOME/.local/bin" >> $GITHUB_PATH
-        # Alternative: install manually if the script fails
-        if [ ! -f "$HOME/.local/bin/kamal" ]; then
-          echo "Official install failed, trying manual install..."
-          mkdir -p $HOME/.local/bin
-          # Try direct download from latest release
-          curl -L "https://github.com/basecamp/kamal/releases/latest/download/kamal-linux-x86_64" -o $HOME/.local/bin/kamal
-          chmod +x $HOME/.local/bin/kamal
-        fi
+        # Debug: check what we downloaded
+        echo "File size: $(wc -c < $HOME/.local/bin/kamal) bytes"
+        echo "File type: $(file $HOME/.local/bin/kamal)"
         # Verify installation
         $HOME/.local/bin/kamal version || echo "Kamal installation failed"
 
