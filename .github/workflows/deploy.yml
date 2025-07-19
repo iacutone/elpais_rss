@@ -42,6 +42,25 @@ jobs:
         mix local.rebar --force
         mix deps.get
 
+    - name: Setup Kamal Configuration
+      env:
+        HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+        HETZNER_REGISTRY_USERNAME: ${{ secrets.HETZNER_REGISTRY_USERNAME }}
+      run: |
+        # Update the deploy config with the actual host and registry username
+        sed -i "s/HETZNER_HOST/$HETZNER_HOST/g" config/deploy.yml
+        sed -i "s/\$HETZNER_REGISTRY_USERNAME/$HETZNER_REGISTRY_USERNAME/g" config/deploy.yml
+        # Create .kamal/secrets file
+        mkdir -p .kamal
+        cat > .kamal/secrets << EOF
+        AWS_ACCESS_KEY=\$AWS_ACCESS_KEY
+        AWS_SECRET_KEY=\$AWS_SECRET_KEY
+        EL_PAIS_RSS_URL=\$EL_PAIS_RSS_URL
+        MAILCHIMP_API_KEY=\$MAILCHIMP_API_KEY
+        GOOGLE_GEMINI_API_KEY=\$GOOGLE_GEMINI_API_KEY
+        HETZNER_REGISTRY_PASSWORD=\$HETZNER_REGISTRY_PASSWORD
+        EOF
+
     - name: Deploy with Kamal
       env:
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
