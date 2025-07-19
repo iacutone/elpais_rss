@@ -24,7 +24,7 @@ done
 
 # Build and deploy
 echo "📦 Building and deploying..."
-mix kamal deploy
+kamal deploy
 
 echo "✅ Deployment completed successfully!"
 echo "🔍 You can check the status with: mix kamal status" 
