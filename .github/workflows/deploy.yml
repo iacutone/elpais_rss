@@ -45,11 +45,8 @@ jobs:
     - name: Setup Kamal Configuration
       env:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
-        HETZNER_REGISTRY_USERNAME: ${{ secrets.HETZNER_REGISTRY_USERNAME }}
+        DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
-        # Update the deploy config with the actual host and registry username
-        sed -i "s/HETZNER_HOST/$HETZNER_HOST/g" config/deploy.yml
-        sed -i "s/\$DOCKER_REGISTRY_PASSWORD/$DOCKER_REGISTRY_PASSWORD/g" config/deploy.yml
         # Create .kamal/secrets file
         mkdir -p .kamal
         cat > .kamal/secrets << EOF
