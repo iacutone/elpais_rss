@@ -26,8 +26,11 @@ jobs:
         # Get the latest version and find the correct asset
         KAMAL_VERSION=$(curl -s https://api.github.com/repos/basecamp/kamal/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         echo "Installing Kamal version: $KAMAL_VERSION"
+        # Debug: show all available assets
+        echo "Available assets:"
+        curl -s "https://api.github.com/repos/basecamp/kamal/releases/latest" | grep '"browser_download_url"' | head -5
         # Find the correct asset URL for linux x86_64
-        ASSET_URL=$(curl -s "https://api.github.com/repos/basecamp/kamal/releases/latest" | grep -o '"browser_download_url": "[^"]*kamal-linux-x86_64[^"]*"' | head -1 | sed 's/"browser_download_url": "//' | sed 's/"//')
+        ASSET_URL=$(curl -s "https://api.github.com/repos/basecamp/kamal/releases/latest" | grep '"browser_download_url"' | grep 'linux' | grep 'x86_64' | head -1 | sed 's/.*"browser_download_url": "//' | sed 's/".*//')
         echo "Downloading from: $ASSET_URL"
         # Download the correct binary
         curl -L "$ASSET_URL" -o $HOME/.local/bin/kamal
