@@ -47,9 +47,6 @@ jobs:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
         HETZNER_REGISTRY_USERNAME: ${{ secrets.HETZNER_REGISTRY_USERNAME }}
       run: |
-        # Update the deploy config with the actual host and registry username
-        sed -i "s/HETZNER_HOST/$HETZNER_HOST/g" config/deploy.yml
-        sed -i "s/\$HETZNER_REGISTRY_USERNAME/$HETZNER_REGISTRY_USERNAME/g" config/deploy.yml
         # Create .kamal/secrets file
         mkdir -p .kamal
         cat > .kamal/secrets << EOF
@@ -59,7 +56,20 @@ jobs:
         MAILCHIMP_API_KEY=\$MAILCHIMP_API_KEY
         GOOGLE_GEMINI_API_KEY=\$GOOGLE_GEMINI_API_KEY
         DOCKER_REGISTRY_PASSWORD=\$DOCKER_REGISTRY_PASSWORD
+        HETZNER_HOST=\$HETZNER_HOST
         EOF
+
+    - name: Setup Kamal on Server
+      env:
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        EL_PAIS_RSS_URL: ${{ secrets.EL_PAIS_RSS_URL }}
+        MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+        GOOGLE_GEMINI_API_KEY: ${{ secrets.GOOGLE_GEMINI_API_KEY }}
+        HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+        DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      run: |
+        kamal setup
 
     - name: Deploy with Kamal
       env:
@@ -71,5 +81,4 @@ jobs:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
         DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
-        # Deploy using Kamal gem
         kamal deploy 
