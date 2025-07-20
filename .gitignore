@@ -26,3 +26,5 @@ elpais_rss-*.tar
 /tmp/
 
 .env
+
+.kamal/secrets

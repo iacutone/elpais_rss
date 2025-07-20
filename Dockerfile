@@ -18,11 +18,10 @@ RUN mix deps.get --only prod
 # Copy application code
 COPY config/ ./config/
 COPY lib/ ./lib/
-# COPY test/ ./test/
 
-# Compile dependencies and application
 ENV MIX_ENV=prod
-RUN mix deps.compile
+
+# Compile the app
 RUN mix compile
 
 # Create release
