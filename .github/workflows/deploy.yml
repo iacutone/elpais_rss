@@ -16,13 +16,7 @@ jobs:
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.4.5'
-
-    - name: Setup Elixir
-      uses: erlef/setup-beam@v1
-      with:
-        elixir-version: '1.17.3'
-        otp-version: '26.0.2'
+        ruby-version: '3.3'
 
     - name: Install Kamal
       run: |
@@ -36,10 +30,13 @@ jobs:
 
     - name: Add SSH known hosts
       run: |
-        mkdir -p ~/.ssh # Ensure .ssh directory exists
-        # This prevents "Host key verification failed" errors.
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        # Remove any existing entry for this host
+        ssh-keygen -R ${{ secrets.HETZNER_HOST }} || true
+        # Add the current host key
         ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
-        chmod 600 ~/.ssh/known_hosts # Set correct permissions for known_hosts
+        chmod 600 ~/.ssh/known_hosts
 
 
     - name: Install dependencies
@@ -75,4 +72,4 @@ jobs:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
         DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
-        kamal deploy
+        kamal deploy --skip-push || (echo "Deployment failed" && exit 1)
