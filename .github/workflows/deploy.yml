@@ -31,14 +31,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 5.161.60.147 >> ~/.ssh/known_hosts
+
       - name: Deploy to Hetzner server
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.HETZNER_HOST }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          debug: true
-          script: |
+        run: |
+          ssh root@5.161.60.147 << 'EOF'
             # Pull the latest image
             docker compose pull
             
@@ -53,3 +55,4 @@ jobs:
             
             # Show running containers
             docker compose ps
+          EOF
