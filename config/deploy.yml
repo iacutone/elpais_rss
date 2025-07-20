@@ -12,9 +12,6 @@ registry:
 ssh:
   user: root
 
-builder:
-  skip: true
-
 env:
   secret:
     - AWS_ACCESS_KEY
