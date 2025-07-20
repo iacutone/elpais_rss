@@ -76,5 +76,6 @@ jobs:
         DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
         echo "Starting Kamal deployment..."
-        kamal deploy --verbose || (echo "Deployment failed, checking logs..." && kamal app logs --lines 50 && exit 1)
+        kamal setup
+        # kamal deploy --verbose || (echo "Deployment failed, checking logs..." && kamal app logs --lines 50 && exit 1)
         # kamal deploy --skip-push || (echo "Deployment failed" && exit 1)

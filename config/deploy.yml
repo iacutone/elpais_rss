@@ -12,6 +12,9 @@ registry:
 ssh:
   user: root
 
+builder:
+  arch: amd64
+
 env:
   secret:
     - AWS_ACCESS_KEY
