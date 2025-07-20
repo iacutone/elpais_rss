@@ -75,10 +75,4 @@ jobs:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
         DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
-        kamal deploy --wait
-
-    - name: Clean up old Kamal images (optional but recommended)
-      if: success() # Only run if the deploy step was successful
-      run: |
-        # This command prunes old images on the server, saving disk space.
-        kamal prune
+        kamal deploy
