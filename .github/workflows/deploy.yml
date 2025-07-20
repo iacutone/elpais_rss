@@ -29,10 +29,18 @@ jobs:
         gem install kamal
         kamal version
 
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.9.0
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.9.0 # Configures SSH agent with your private key
       with:
-        ssh-private-key: ${{ secrets.HETZNER_HOST }}
+        ssh-private-key: ${{ secrets.HETZNER_SSH_PRIVATE_KEY }} # Loads the private key from GitHub secrets
+
+    - name: Add SSH known hosts
+      run: |
+        mkdir -p ~/.ssh # Ensure .ssh directory exists
+        # This prevents "Host key verification failed" errors.
+        ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts # Set correct permissions for known_hosts
+
 
     - name: Install dependencies
       run: |
@@ -67,4 +75,10 @@ jobs:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
         DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
       run: |
-        kamal deploy 
+        kamal deploy --wait
+
+    - name: Clean up old Kamal images (optional but recommended)
+      if: success() # Only run if the deploy step was successful
+      run: |
+        # This command prunes old images on the server, saving disk space.
+        kamal prune
