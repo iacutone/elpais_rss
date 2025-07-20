@@ -21,3 +21,6 @@ env:
     - EL_PAIS_RSS_URL
     - MAILCHIMP_API_KEY
     - GOOGLE_GEMINI_API_KEY 
+
+healthcheck:
+  max_attempts: 0
