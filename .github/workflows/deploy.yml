@@ -38,13 +38,6 @@ jobs:
         ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
         chmod 600 ~/.ssh/known_hosts
 
-
-    - name: Install dependencies
-      run: |
-        mix local.hex --force
-        mix local.rebar --force
-        mix deps.get
-
     - name: Setup Kamal Configuration
       env:
         HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
