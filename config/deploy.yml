@@ -1,12 +1,15 @@
 service: elpais_rss
 image: iacutone/elpais_rss
 servers: 
-  - "5.161.60.147"
+  - HETZNER_HOST
 
 registry:
   username: iacutone
   password:
     - DOCKER_REGISTRY_PASSWORD
+
+ssh:
+  user: root
 
 builder:
   arch: amd64
