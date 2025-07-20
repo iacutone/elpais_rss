@@ -34,9 +34,12 @@ jobs:
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 5.161.60.147 >> ~/.ssh/known_hosts
+          # Debug: Check if key was written correctly
+          echo "Key file size: $(wc -c < ~/.ssh/id_rsa)"
+          echo "Key starts with: $(head -1 ~/.ssh/id_rsa)"
 
       - name: Deploy to Hetzner server
         run: |
