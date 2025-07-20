@@ -18,3 +18,9 @@ env:
     - EL_PAIS_RSS_URL
     - MAILCHIMP_API_KEY
     - GOOGLE_GEMINI_API_KEY 
+
+ssh:
+  user: root
+  options:
+    StrictHostKeyChecking: no
+    UserKnownHostsFile: /dev/null
