@@ -55,6 +55,15 @@ jobs:
         HETZNER_HOST=\$HETZNER_HOST
         EOF
 
+        # Configure SSH to skip host key verification
+        mkdir -p ~/.ssh
+        cat > ~/.ssh/config << EOF
+        Host ${{ secrets.HETZNER_HOST }}
+          StrictHostKeyChecking no
+          UserKnownHostsFile /dev/null
+        EOF
+        chmod 600 ~/.ssh/config
+
     - name: Deploy with Kamal
       env:
         AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
