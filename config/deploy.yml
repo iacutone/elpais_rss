@@ -1,7 +1,7 @@
 service: elpais_rss
 image: iacutone/elpais_rss
 servers: 
-  - HETZNER_HOST
+  - "5.161.60.147"
 
 registry:
   username: iacutone
