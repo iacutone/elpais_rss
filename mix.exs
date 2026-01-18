@@ -28,7 +28,6 @@ defmodule ElpaisRss.MixProject do
       {:feeder_ex, git: "https://github.com/KristerV/feeder_ex.git"},
       {:jason, "~> 1.4"},
       {:req, "~> 0.5.14"},
-      {:quantum, "~> 3.0"},
       {:readability, "~> 0.12"}
     ]
   end
