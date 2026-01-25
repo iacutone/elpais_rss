@@ -3,11 +3,9 @@ defmodule ElpaisRss.Email do
   Retrieve emails from provider and email clients
   """
 
-  @endpoint "https://us13.api.mailchimp.com/3.0/lists/208637560c/members"
-
   @doc "Fetch subscriber emails from MailChimp"
   def fetch do
-    with {:ok, %{body: body}} <- HTTPoison.get(@endpoint, headers()),
+    with {:ok, %{body: body}} <- HTTPoison.get(Application.fetch_env!(:elpais_rss, :mailchimp_unsubscribe_endpoint), headers()),
          {:ok, %{"members" => members}} <- Jason.decode(body) do
       Enum.reduce(members, [], fn
         %{"status" => "subscribed", "email_address" => email}, acc ->
