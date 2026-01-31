@@ -1,53 +1,46 @@
-name: Deploy
+name: Run ElPais RSS
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
   schedule:
     - cron: '0 16 * * *'  # 11 AM EST (16:00 UTC) / 11 AM EDT (15:00 UTC during DST)
 
-concurrency:
-  group: production-deployment
-  cancel-in-progress: true
-
 jobs:
-  deploy:
+  run:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      DOCKER_BUILDKIT: 1
-      VERSION: ${{ github.sha }}
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
         with:
-          ruby-version: '3.3.6'
-          bundler-cache: true
-      - name: Install kamal gem
-        run: gem install kamal
-      - name: Login to Docker Registry
-        uses: docker/login-action@v3
+          elixir-version: '1.17.3'
+          otp-version: '26.0.2'
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          registry: registry.iacutone.synology.me
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Create Kamal secrets file
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      
+      - name: Install dependencies
         run: |
-          mkdir -p .kamal
-          cat > .kamal/secrets << EOF
-          REGISTRY_USERNAME=${{ secrets.REGISTRY_USERNAME }}
-          REGISTRY_PASSWORD=${{ secrets.REGISTRY_PASSWORD }}
-          OLLAMA_BASE_URL=${{ secrets.OLLAMA_BASE_URL }}
-          HETZNER_HOST=5.161.60.147
-          EOF
-          chmod 600 .kamal/secrets
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.HETZNER_SSH_PRIVATE_KEY }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Deploy
-        run: kamal deploy --version=$VERSION
+          mix local.hex --force
+          mix local.rebar --force
+          mix deps.get
+      
+      - name: Run ElPais RSS
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          EL_PAIS_RSS_URL: ${{ secrets.EL_PAIS_RSS_URL }}
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          GOOGLE_GEMINI_API_KEY: ${{ secrets.GOOGLE_GEMINI_API_KEY }}
+          CRONHUB_URL: ${{ secrets.CRONHUB_URL }}
+          MAILCHIMP_UNSUBSCRIBE_ENDPOINT: ${{ secrets.MAILCHIMP_UNSUBSCRIBE_ENDPOINT }}
+          MIX_ENV: prod
+        run: mix run -e "ElpaisRss.run()"
