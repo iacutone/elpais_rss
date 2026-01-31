@@ -31,7 +31,6 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: registry.iacutone.synology.me
-          # registry: ${{ secrets.DOCKER_REGISTRY_URL }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Create Kamal secrets file
