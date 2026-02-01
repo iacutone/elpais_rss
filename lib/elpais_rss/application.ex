@@ -7,7 +7,7 @@ defmodule ElpaisRss.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [ElpaisRss.Scheduler]
+    children = []
 
     Supervisor.start_link(children, strategy: :one_for_one)
   end
