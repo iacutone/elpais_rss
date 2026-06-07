@@ -5,7 +5,16 @@ defmodule ElpaisRss.Article do
 
   @doc "Fetch the first RSS entry's id and summarize the article text"
   def fetch do
-    with {:ok, %{body: body}} <- Req.get(url()),
+    headers = [
+      {"User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"},
+      {"Accept", "application/rss+xml, application/xml, text/xml, */*"},
+      {"Accept-Language", "en-US,en;q=0.9,es;q=0.8"},
+      {"Accept-Encoding", "gzip, deflate, br"},
+      {"Cache-Control", "no-cache"},
+      {"Pragma", "no-cache"}
+    ]
+
+    with {:ok, %{body: body}} <- Req.get(url(), headers: headers),
          {:ok, %{entries: [%{id: id} | _]}, _} <- FeederEx.parse(body),
          %{title: title, article_text: article_text} <- Readability.summarize(id) do
       translated_text = ElpaisRss.Translate.translate(article_text)
